@@ -100,10 +100,12 @@ def selectionSortSEED(line, seed):
     return line
 
 def bubblesort( line ):
-    for i in range( len( line ) ):
-        for k in range( len( line ) - 1, i, -1 ):
-            if ( line[k][2] < line[k - 1][2] ):
-                swap( line, k, k - 1 )
+	for i in range( len( line ) ):
+		#for k in range( len( line ) - 1, i, -1 ):
+		for k in range( len( line ) - 1, i, -1 ):
+			if ( line[k][2] < line[k - 1][2] ):
+				swap( line, k, k - 1 )
+	return line
 
 def bubblesortSEED( line, seed ):
     for i in range( len( line ) ):

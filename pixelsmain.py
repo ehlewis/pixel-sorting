@@ -39,6 +39,8 @@ def parse():
 			sortedArray = sorting.selectionSortSEED(lumrow, seed)
 		elif args.sort == "bubblesortseed":
 			sortedArray = sorting.bubblesortSEED(lumrow, seed)
+		elif args.sort == "bubblesort":
+			sortedArray = sorting.bubblesort(lumrow)
 		elif args.sort == "quicksortseed":
 			sortedArray = sorting.lessthansoappend(sorting.quicksortSEED(lumrow, seed), row)
 
@@ -56,6 +58,8 @@ if __name__ == '__main__':
 	    print "Using Seeded Selection Sort"
 	elif args.sort == "bubblesortseed": # This works better
 	    print "Using Seeded Bubble Sort"
+	elif args.sort == "bubblesort": # This works better
+	    print "Using Bubble Sort"
 	elif args.sort == "quicksortseed": # This works well
 	    print "Using Seeded Quick Sort"
 	else:
