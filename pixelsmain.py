@@ -3,31 +3,37 @@ import os, sys, math, random
 from time import time
 import sorting
 import argparse
+import csv
+
 
 
 def get_pixel(image, i, j):
     # Inside image bounds?
-    if i > width or j > height:
-      return None
+	width, height = im.size
+	if i > width or j > height:
+		return None
     # Get Pixel
-    pixel = image.getpixel((i, j))
-    return pixel
+	pixel = image.getpixel((i, j))
+	return pixel
 
-def lum (r,g,b):
- return math.sqrt( .241 * r + .691 * g + .068 * b )
+
+def pixel_luminosity(pixel):
+ return math.sqrt( .241 * pixel[0] + .691 * pixel[1] + .068 * pixel[2] )
 
 def write_line(line):
     for x in range (0, width):
-        value = (line[x][3], line[x][4], line[x][5])
-        outMap[x,line[x][1]] = value
+		r,g,b = line[x][3]
+		value = (r, g, b)
+		y = line[x][1]
+		outMap[x,y] = value
 
-def parse():
+def parse(im, height, width):
 	for y in range (0, height): # For each row
 		lumrow = [] # Reset for each new row
 		for x in range (0, width): # For each pixel in the row
-			r, g, b = get_pixel(im, x, y)
-			row.append([x, y, get_pixel(im, x, y), r, g, b]) # Stores the pixels in the order that we saw them
-			lumrow.append([x, y, lum (r,g,b), r, g, b]) # Stores the pixels to be processed into luminosity order
+			pixel = get_pixel(im, x, y)
+			row.append([x, y, pixel]) # Stores the pixels in the order that we saw them
+			lumrow.append([x, y, pixel_luminosity(pixel), pixel]) # Stores the pixels to be processed into luminosity order
 
 		CURSOR_UP_ONE = '\x1b[1A'
 		ERASE_LINE = '\x1b[2K'
@@ -46,46 +52,14 @@ def parse():
 
 		write_line(sortedArray)
 
-
-
-if __name__ == '__main__':
-	parser = argparse.ArgumentParser(description='Process pictures and sort the pixels')
-	parser.add_argument('image', metavar='image', type=str, help='the image to manipulate')
-	parser.add_argument("-sort", help = "Sorting algorithm ( )")
-	args = parser.parse_args()
-
-	if args.sort == "selectionsortseed":
-	    print "Using Seeded Selection Sort"
-	elif args.sort == "bubblesortseed": # This works better
-	    print "Using Seeded Bubble Sort"
-	elif args.sort == "bubblesort": # This works better
-	    print "Using Bubble Sort"
-	elif args.sort == "quicksortseed": # This works well
-	    print "Using Seeded Quick Sort"
-	else:
-		sys.exit("ERROR: Not an available sorting method")
-
-	try:
-		im = Image.open(args.image)
-		print(args.image)
-	except:
-		sys.exit("ERROR: Image could not be found")
-
+def parse_starter(im, width, height):
 	pixelMap = im.load()
-
-	width, height = im.size
-	row = []
-	lumrow = []
-
-	out = Image.new('RGB', (width, height))
-	outMap = out.load()
 
 	print(im.format, im.size, im.mode)
 	print("Image width: " + str(width))
 	print("Image height: " + str(height) + "\n\n")
 
-
-	parse() # ALL THE WORK
+	parse(im, height, width) # ALL THE WORK
 
 	tm = str(time())
 	outfile = args.image + tm[:-1] + ".jpg"
@@ -95,3 +69,68 @@ if __name__ == '__main__':
 		print('\x1b[1A' + '\x1b[2K' + "Done! Saved as " + str(outfile))
 	except:
 		sys.exit("ERROR: Image could not be saved")
+
+
+
+def convert_to_greyscale(image):
+	img = image.convert('L')
+	return img
+
+def convert_to_grey_array(image):
+	outarray = []
+	img = convert_to_greyscale(image)
+	for y in range (0, height): # For each row
+		greyrow = [] # Reset for each new row
+		for x in range (0, width): # For each pixel in the row
+			#r, g, b = get_pixel(im, x, y)
+			#row.append([x, y, get_pixel(im, x, y), r, g, b])
+			pixel = img.getpixel((x, y))
+			print(pixel)
+			greyrow.append([x, y, pixel])
+		outarray.append(greyrow)
+	file = open((args.image[:-4] + "grey.csv"), 'w+')
+	with file as f:
+		writer = csv.writer(f)
+		writer.writerows(outarray)
+
+if __name__ == '__main__':
+	parser = argparse.ArgumentParser(description='Process pictures and sort the pixels')
+	parser.add_argument('image', metavar='image', type=str, help='the image to manipulate')
+	parser.add_argument("-sort", help = "Sorting algorithm ( )")
+	args = parser.parse_args()
+
+	try:
+		im = Image.open(args.image)
+		width, height = im.size
+		print(args.image)
+	except:
+		sys.exit("ERROR: Image could not be found")
+
+	if args.sort == "selectionsortseed":
+	    print "Using Seeded Selection Sort"
+	elif args.sort == "bubblesortseed": # This works better
+	    print "Using Seeded Bubble Sort"
+	elif args.sort == "bubblesort": # This works better
+	    print "Using Bubble Sort"
+	elif args.sort == "quicksortseed": # This works well
+	    print "Using Seeded Quick Sort"
+	elif args.sort == "greyscale": # This works well
+		print "Converting to greyscale"
+		img = convert_to_greyscale(im)
+		img.save(args.image[:-4] + "grey.jpg")
+		sys.exit('\x1b[1A' + '\x1b[2K' + "Converted to greyscale")
+	elif args.sort == "array":
+		convert_to_grey_array(im)
+		sys.exit("done")
+
+	else:
+		sys.exit("ERROR: Not an available method")
+
+
+
+	width, height = im.size
+	out = Image.new('RGB', (width, height))
+	outMap = out.load()
+	row = []
+	lumrow = []
+	parse_starter(im, width, height)
