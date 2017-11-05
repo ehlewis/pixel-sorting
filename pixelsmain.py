@@ -72,26 +72,6 @@ def parse_starter(im, width, height):
 
 
 
-def convert_to_greyscale(image):
-	img = image.convert('L')
-	return img
-
-def convert_to_grey_array(image):
-	outarray = []
-	img = convert_to_greyscale(image)
-	for y in range (0, height): # For each row
-		greyrow = [] # Reset for each new row
-		for x in range (0, width): # For each pixel in the row
-			#r, g, b = get_pixel(im, x, y)
-			#row.append([x, y, get_pixel(im, x, y), r, g, b])
-			pixel = img.getpixel((x, y))
-			print(pixel)
-			greyrow.append([x, y, pixel])
-		outarray.append(greyrow)
-	file = open((args.image[:-4] + "grey.csv"), 'w+')
-	with file as f:
-		writer = csv.writer(f)
-		writer.writerows(outarray)
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description='Process pictures and sort the pixels')
@@ -114,14 +94,7 @@ if __name__ == '__main__':
 	    print "Using Bubble Sort"
 	elif args.sort == "quicksortseed": # This works well
 	    print "Using Seeded Quick Sort"
-	elif args.sort == "greyscale": # This works well
-		print "Converting to greyscale"
-		img = convert_to_greyscale(im)
-		img.save(args.image[:-4] + "grey.jpg")
-		sys.exit('\x1b[1A' + '\x1b[2K' + "Converted to greyscale")
-	elif args.sort == "array":
-		convert_to_grey_array(im)
-		sys.exit("done")
+
 
 	else:
 		sys.exit("ERROR: Not an available method")
