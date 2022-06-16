@@ -6,17 +6,20 @@ Seeing as all the sort methods would yield the same result, there is a seeded op
 This seed will only sort a portion of the row, leaving more visual artifacts present in the final image
 
 ## Usage
-`code` python pixelsmain.py -sort [bubblesort, selectionsortseed, bubblesortseed, quicksortseed] infile.jpeg `code`
+`python pixelsmain.py -sort [bubblesort, selectionsortseed, bubblesortseed, quicksortseed] infile.jpeg`
 
 ## Examples
 
 ![alt text](https://github.com/ehlewis/pixel-sorting/blob/master/media/in.jpg?raw=true)
+
 *Initial input*
 
 ![alt text](https://github.com/ehlewis/pixel-sorting/blob/master/media/bubblesort.jpg?raw=true)
+
 *Bubble Sort*
 
 ![alt text](https://github.com/ehlewis/pixel-sorting/blob/master/media/bubblesortseed.jpg?raw=true)
+
 *Bubble Sort Seeded*
 
 ## Unfinished work
