@@ -6,8 +6,6 @@ def quicksort(array):
 
     if len(array) > 1:
         pivot = array[0][2]
-        #print (str(pivot))
-
         n = 0
         while n < len(array):
             if array[n][2] < pivot:
@@ -17,15 +15,7 @@ def quicksort(array):
             if array[n][2] > pivot:
                 greater.append(array[n])
             n += 1
-        '''for i in array:
-            if i < pivot:
-                less.append(i)
-            if i[2] == pivot:
-                equal.append(i)
-            if i[2] > pivot:
-                greater.append(i)'''
-        # Don't forget to return something!
-        return quicksort(less)+equal+quicksort(greater)  # Just use the + operator to join lists
+        return quicksort(less)+equal+quicksort(greater)
     # Note that you want equal ^^^^^ not pivot
     else:  # You need to hande the part at the end of the recursion - when you only have one element in your array, just return the array.
         return array
@@ -40,8 +30,6 @@ def quicksortSEED(array, seed):
         pivot = array[0][2]
         n = 0
         while n < seed and n < len(array):
-            """print (str(pivot))
-            print(array[n][2])"""
             if array[n][2] < pivot:
                 less.append(array[n])
             if array[n][2] == pivot:

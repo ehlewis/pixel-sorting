@@ -5,7 +5,7 @@ from mathutils import Vector
 
 array = []
 importedArray = []
-with open('/Users/evano/Documents/GitHub/pixel-sorting/picgreygrey.csv', 'rb') as f:
+with open('pic.csv', 'rb') as f:
     reader = csv.reader(f)
     for line in f:
         cleanedLine = line.strip()
